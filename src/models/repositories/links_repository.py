@@ -1,36 +1,39 @@
 from sqlite3 import Connection
 from typing import Dict, Tuple, List
-class EmailsToInviteRepository:
+
+class LinksRepository:
     def __init__(self, conn:Connection) -> None:
         self.__conn=conn
     
-    def register_email(self, email_info:Dict):
+    def register_link(self, link_info:Dict):
         cursor = self.__conn.cursor()  #get cursor from connection 
         cursor.execute(
             '''
-                INSERT INTO emails_to_invite 
-                    (id, trip_id, email) 
+                INSERT INTO links 
+                    (id, trip_id, link, title) 
                 VALUES 
-                    (?, ?, ?)
+                    (?, ?, ?, ?)
             ''',
                 (
-                email_info["id"],
-                email_info["trip_id"],
-                email_info["email"],
+                link_info["id"],
+                link_info["trip_id"],
+                link_info["link"],
+                link_info["title"]
                 )
         )
         self.__conn.commit()
 
-    def find_emails_from_trip (self, trip_id:str) -> List[Tuple]:
+    def find_links_from_trip (self, trip_id:str) -> List[Tuple]:
         cursor = self.__conn.cursor()
         cursor.execute(
             '''
-                SELECT * FROM emails_to_invite WHERE trip_id = ?
+                SELECT * FROM links WHERE trip_id = ?
             ''', 
                 (trip_id,)
         ) # good practice to put a "," after the last item to be placed in the query
-        emails = cursor.fetchall()
-        return emails
+        links = cursor.fetchall()
+        
+        return links
     
 
 
