@@ -7,7 +7,6 @@ class ParticipantsRepository():
 
 
     def register_participants(self, participants_info: Dict) -> None:
-        print(participants_info)
         cursor = self.__conn.cursor()
         cursor.execute(
             """
@@ -27,7 +26,7 @@ class ParticipantsRepository():
         cursor.execute(
             """
                 SELECT p.id, p.name, p.is_confirmed, e.email FROM participants as p 
-                JOIN emails_to_invite_id as e ON e.id = p.emails_to_invite_id
+                JOIN emails_to_invite as e ON e.id = p.emails_to_invite_id
                 WHERE p.trip_id = ?
 
             """, (trip_id, )
@@ -41,6 +40,6 @@ class ParticipantsRepository():
         cursor.execute(
             """
                 UPDATE participants SET is_confirmed = 1 WHERE id = ?
-            """, (participant_id)
+            """, (participant_id,)
         )
         self.__conn.commit()
