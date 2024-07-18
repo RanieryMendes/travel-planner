@@ -7,6 +7,7 @@ class ParticipantsRepository():
 
 
     def register_participants(self, participants_info: Dict) -> None:
+        print(participants_info)
         cursor = self.__conn.cursor()
         cursor.execute(
             """
